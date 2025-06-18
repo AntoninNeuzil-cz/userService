@@ -1,0 +1,73 @@
+openapi: 3.0.0
+
+info:
+  title: User Service
+  description: Service provides and saves user data.
+  version: 1.0.0
+
+paths:
+  /save:
+    post:
+      summary: Store user data into the database.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "201":
+          description: User successfully saved.
+        "400":
+          description: Invalid request body.
+        "500":
+          description: Internal server error.
+
+  /{id}:
+    get:
+      summary: Retrieve user data from the database.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The external ID of the user.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: User data retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: User not found.
+        "500":
+          description: Internal server error.
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        external_id:
+          type: string
+          format: uuid
+          description: The external ID of the user.
+        name:
+          type: string
+          description: The name of the user.
+        email:
+          type: string
+          format: email
+          description: The email address of the user.
+        date_of_birth:
+          type: string
+          format: date-time
+          description: The date of birth of the user.
+      required:
+        - external_id
+        - name
+        - email
+        - date_of_birth
