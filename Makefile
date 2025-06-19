@@ -27,3 +27,7 @@ generate:
 run-docker:
 	docker build -t user-service .
 	docker run --rm -p 8080:8080 --name user-service-container user-service
+
+.PHONY: test
+test:
+	go test ./test/... -v
