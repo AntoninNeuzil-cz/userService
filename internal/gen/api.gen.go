@@ -35,17 +35,17 @@ type User struct {
 	Name string `json:"name"`
 }
 
-// PostSaveJSONRequestBody defines body for PostSave for application/json ContentType.
-type PostSaveJSONRequestBody = User
+// SaveUserJSONRequestBody defines body for SaveUser for application/json ContentType.
+type SaveUserJSONRequestBody = User
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 	// Store user data into the database.
 	// (POST /save)
-	PostSave(ctx echo.Context) error
+	SaveUser(ctx echo.Context) error
 	// Retrieve user data from the database.
 	// (GET /{id})
-	GetId(ctx echo.Context, id openapi_types.UUID) error
+	GetUser(ctx echo.Context, id openapi_types.UUID) error
 }
 
 // ServerInterfaceWrapper converts echo contexts to parameters.
@@ -53,17 +53,17 @@ type ServerInterfaceWrapper struct {
 	Handler ServerInterface
 }
 
-// PostSave converts echo context to params.
-func (w *ServerInterfaceWrapper) PostSave(ctx echo.Context) error {
+// SaveUser converts echo context to params.
+func (w *ServerInterfaceWrapper) SaveUser(ctx echo.Context) error {
 	var err error
 
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.PostSave(ctx)
+	err = w.Handler.SaveUser(ctx)
 	return err
 }
 
-// GetId converts echo context to params.
-func (w *ServerInterfaceWrapper) GetId(ctx echo.Context) error {
+// GetUser converts echo context to params.
+func (w *ServerInterfaceWrapper) GetUser(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "id" -------------
 	var id openapi_types.UUID
@@ -74,7 +74,7 @@ func (w *ServerInterfaceWrapper) GetId(ctx echo.Context) error {
 	}
 
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.GetId(ctx, id)
+	err = w.Handler.GetUser(ctx, id)
 	return err
 }
 
@@ -106,23 +106,23 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
-	router.POST(baseURL+"/save", wrapper.PostSave)
-	router.GET(baseURL+"/:id", wrapper.GetId)
+	router.POST(baseURL+"/save", wrapper.SaveUser)
+	router.GET(baseURL+"/:id", wrapper.GetUser)
 
 }
 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/7STz47TQAzGX2VkOIYmC8slR4SEekMsnFarappxtrNKZgbbiaiqvDsaN/un21QIIU6Z",
-	"euxvbH+/HqCJfYoBgzDUB+Bmh73V4w9Gyt9EMSGJR406K7iJ7WbrSXYaQG7IJ/ExQA3fd2hyiomt0ZR8",
-	"kB2agZFWUEAbqbcCtQq9E98jFCD7hFADC/lwD1MB2FvfLavrlbHOETJfVD8KLCn/EqRgu413F/TnBLP+",
-	"fFF9GLxbEg+2x2XVfPNa7lX5VADhz8ETOqhvTxqdlYunsU5duHvSitsHbASmLOZDG8+buUEafYMmURy9",
-	"QzY2OMN2RNa+snlWm/PSZcVMgZmLoIARiY9CV6tqVeWhY8Jgk4caPmiogGRlp7CUWVgZiiz5m0myuZO1",
-	"gxq+RpabnHGcHFk+RbfPeU0MgkFLbEqdb7SofOD89COl+fSWsIUa3pTPGJczw6UCPJ3uVWhADXCKgY9I",
-	"v6+uzvekc/PQNMjcDl231yW5VZ74uqrOC9ZhtJ13Zp7EbKPba/bH5eyZMkYakQwSRVopBDz0vaV99koi",
-	"4bMtxgeJSlD+tbWMx4Ly4N2Un7jHhSV/QVk7NYVsj4LEUN/+Jfg+52RXH0msQak83Wvxwpc//FWmuzMP",
-	"qv/g+4KlukhCIY8juhOHZ2+vL8AQopg2DsH9o6vf5sdfGNtS7M+MnabfAQAA///4IsfunQUAAA==",
+	"H4sIAAAAAAAC/7STTW/bMAyG/4rA7egl6dZdfBwGDL3u41QUhWLRjQpb0kjaWFD4vw9k3I80DoZh2MkK",
+	"RT4i+b55gCb3JSdMwlA/ADc77L0dfzCSfgvlgiQRLRq84G1ub7eRZGcB5IZikZgT1PB9h05TXG6dpehB",
+	"dugGRlpBBW2m3gvUBnonsUeoQPYFoQYWiukOpgqw97FbptuV8yEQMp+lHwBL5F+ClHx3G8MZ/pzgrj6f",
+	"pQ9DDEvw5HtcpurNa9yr8qkCwp9DJAxQXx81OpOrp7GOVbh5YuXtPTYCk8JiavNpM9+QxtigK5THGJCd",
+	"T8GxH5GtLxXPW3NROiWqC9xcBBWMSHwAXaw2q40OnQsmXyLU8MFCFRQvOzPLWsHmocyiX3WS106ugvbi",
+	"RzSXHSZHlk857DWvyUkwWYkvpYuNFa3vWZ9+dKme3hK2UMOb9bON17OH14aejvcqNKAFuOTEB0u/31yc",
+	"7snm5qFpkLkdum5vSwornfhyszktuEqj72Jw8yRum8Pesj8uZ88uY6QRySFRppWZgIe+97TX/UgmfJbF",
+	"xSTZHKS/tp7xULB+iGHSJ+5wYclfUOYdF0++R0FiqK//0vpRc1TXRy/WYL483mz1Qpk//FmmmxMVNv9B",
+	"+QVRbZWEQhFHDEcaz+penrFDyuLaPKTwj7p+nR9/IW1LuT+Rdpp+BwAA//9bziK2nwUAAA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

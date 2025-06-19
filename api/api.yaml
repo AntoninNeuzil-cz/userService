@@ -8,6 +8,7 @@ info:
 paths:
   /save:
     post:
+      operationId: saveUser
       summary: Store user data into the database.
       requestBody:
         required: true
@@ -25,6 +26,7 @@ paths:
 
   /{id}:
     get:
+      operationId: getUser
       summary: Retrieve user data from the database.
       parameters:
         - name: id

@@ -1,7 +1,7 @@
 
 .PHONY: build
 build:
-	go build -ldflags "-X main.GitVersion=${GIT_VERSION}" -o user-service -v cmd/server/server.go
+	go build -o user-service cmd/server/server.go
 
 .PHONY: run
 run: generate build
