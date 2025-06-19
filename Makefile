@@ -23,3 +23,7 @@ generate:
 	go generate ./...
 	oapi-codegen --config oapi-codegen.config.yaml api/api.yaml > internal/gen/api.gen.go
 
+.PHONY: run-docker
+run-docker:
+	docker build -t user-service .
+	docker run --rm -p 8080:8080 --name user-service-container user-service
